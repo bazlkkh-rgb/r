@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кәусәр</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:black;
+    color:white;
+    text-align:center;
+    overflow:hidden;
+}
+
+/* Welcome Screen */
+#welcome{
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:10;
+    animation:fadeOut 3s 3s forwards;
+}
+
+@keyframes fadeOut{
+    to{ opacity:0; visibility:hidden; }
+}
+
+#welcome h1{
+    font-size:40px;
+    background:linear-gradient(45deg,#d4af37,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Ай */
+.moon{
+    position:absolute;
+    top:50px;
+    right:-200px;
+    width:120px;
+    height:120px;
+    background:radial-gradient(circle,#fff,#ccc);
+    border-radius:50%;
+    box-shadow:0 0 40px white;
+    animation:moonMove 15s linear infinite;
+}
+
+@keyframes moonMove{
+    from{ right:-200px; }
+    to{ right:120%; }
+}
+
+/* Алтын текст */
+.gold{
+    background:linear-gradient(45deg,#d4af37,#ffd700,#b8860b);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.container{
+    padding:60px 20px;
+}
+
+button{
+    padding:14px 30px;
+    margin:10px;
+    border:2px solid #d4af37;
+    background:transparent;
+    color:#ffd700;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.4s;
+}
+
+button:hover{
+    background:#d4af37;
+    color:black;
+    box-shadow:0 0 25px #ffd700;
+    transform:scale(1.1);
+}
+
+#countdown{
+    margin-top:20px;
+    color:#ffd700;
+}
+
+.signature{
+    margin-top:40px;
+    font-size:20px;
+    font-style:italic;
+    background:linear-gradient(45deg,#d4af37,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="welcome">
+<h1>🌙 Қасиетті Рамазан 👑</h1>
+<p>Текстті бас</p>
+</div>
+
+<div class="moon"></div>
+<canvas id="stars"></canvas>
+
+<div class="container">
+<h1 class="gold">Рамазан Құтты Болсын 🕌</h1>
+
+<p>
+Бұл қасиетті ай сізге мол сауап, 
+шексіз береке және жүрек тыныштығын әкелсін 🤲✨
+</p>
+
+<div id="countdown"></div>
+
+<br>
+
+<button onclick="wish()">✨ Тілек</button>
+<button onclick="dua()">🤲 Дұға</button>
+
+
+<script>
+/* Countdown */
+const target = new Date("March 20, 2026 00:00:00").getTime();
+setInterval(()=>{
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    const days = Math.floor(diff/(1000*60*60*24));
+    const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+    const seconds = Math.floor((diff%(1000*60))/1000);
+
+    document.getElementById("countdown").innerHTML =
+    "Рамазан айы аяқталғанға дейін дейін: "+days+" күн "+hours+" сағ "+minutes+" мин "+seconds+" сек";
+},1000);
+
+/* Батырмалар */
+function wish(){
+    sparkle();
+    alert("Рамазан айы мол сауап пен береке әкелсін!");
+}
+function dua(){
+    sparkle();
+    alert("«Аллаһуммә ләкә сумту уә бикә әәмәнту уә ‘аләйкә тәуәккәлту уә ‘ала ризқикә әфтарту уә саумәлғади мин шәһри Рамадана нәуәйту, фәғфирлии мәә қаддамту уә мәә аххарту». 🤲");
+}
+
+/* Ұшқын эффект */
+function sparkle(){
+    for(let i=0;i<20;i++){
+        let star=document.createElement("div");
+        star.style.position="fixed";
+        star.style.width="5px";
+        star.style.height="5px";
+        star.style.background="#ffd700";
+        star.style.top=Math.random()*window.innerHeight+"px";
+        star.style.left=Math.random()*window.innerWidth+"px";
+        star.style.boxShadow="0 0 10px #ffd700";
+        document.body.appendChild(star);
+        setTimeout(()=>star.remove(),1000);
+    }
+}
+
+/* Жұлдыздар */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars=[];
+for(let i=0;i<120;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+    });
+}
+setInterval(draw,50);
+</script>
+
+</body>
+</html>
